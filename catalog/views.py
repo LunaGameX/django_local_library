@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Book, Author, BookInstance, Genre
 from django.views import generic
 from django.contrib.auth.decorators import login_required, permission_required
@@ -130,4 +130,18 @@ class AuthorDelete(DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
 
+
+@login_required
+def favorite(request, fav_id: int):
+    # Добавление в избранное
+    book = get_object_or_404(Book, id=fav_id)
+    if request.method == "POST":
+        book.favorites.add(book.id, request.user.id)
+    return redirect(reverse("my-favorites-book"))
+
+@login_required
+def view_favorite_book(request):
+    # Вывод избранных книг
+    books = Book.objects.filter(favorites__username=request.user)
+    return render(request, template_name='catalog/favorites.html', context={'books': books})
 

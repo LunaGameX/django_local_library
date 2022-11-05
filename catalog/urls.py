@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^author/create/$', views.AuthorCreate.as_view(), name='author_create'),
     url(r'^author/(?P<pk>\d+)/update/$', views.AuthorUpdate.as_view(), name='author_update'),
     url(r'^author/(?P<pk>\d+)/delete/$', views.AuthorDelete.as_view(), name='author_delete'),
+    path('<int:fav_id>/', views.favorite, name='add-favorite-book'),
+    path('my-favorite-book/', views.view_favorite_book, name='my-favorite-book'),
 ]
 
 
